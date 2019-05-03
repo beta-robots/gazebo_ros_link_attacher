@@ -17,8 +17,8 @@ endif()
 #####################################
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS 
-  roscpp 
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
   gazebo_ros
   std_msgs
   message_generation
@@ -57,10 +57,17 @@ include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE
 ## Declare a cpp library
 add_library(${PROJECT_NAME} src/gazebo_ros_link_attacher.cpp)
 
-
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+
+## Declare a cpp library
+add_library(gazebo_ros_always_attached src/gazebo_ros_always_attached.cpp)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(gazebo_ros_always_attached ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+add_dependencies(gazebo_ros_always_attached ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 
 #############
@@ -73,7 +80,7 @@ install(PROGRAMS
 )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME} gazebo_ros_always_attached
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
