@@ -86,7 +86,7 @@ namespace gazebo
       }
 
     attached_ = false;
-    timer_ = nh_.createTimer(ros::Duration(5), &GazeboRosAlwaysAttached::tryAttach, this);
+    timer_ = nh_.createTimer(ros::Duration(2), &GazeboRosAlwaysAttached::tryAttach, this);
   }
 
   void GazeboRosAlwaysAttached::tryAttach(const ros::TimerEvent& _e)
@@ -97,21 +97,21 @@ namespace gazebo
       // if we try to create a joint in between two links
       // more than once (even deleting any reference to the first one)
       // gazebo hangs/crashes
-      ROS_INFO_STREAM("Creating new joint.");
+      ROS_DEBUG_STREAM("Creating new joint.");
 
       ROS_DEBUG_STREAM("Getting BasePtr of " << joint_.model1);
       physics::BasePtr b1 = world_->ModelByName(joint_.model1);
 
       if (b1 == NULL)
       {
-        ROS_ERROR_STREAM(joint_.model1 << " model was not found, please ensure the model exists");
+        ROS_ERROR_STREAM_ONCE("GazeboRosAlwaysAttached plugin: " << joint_.model1 << " model was not found, ensure the model exists, or remove the plugin.");
         return;
       }
       ROS_DEBUG_STREAM("Getting BasePtr of " << joint_.model2);
       physics::BasePtr b2 = world_->ModelByName(joint_.model2);
       if (b2 == NULL)
       {
-        ROS_ERROR_STREAM(joint_.model2 << " model was not found, please ensure the model exists");
+        ROS_ERROR_STREAM_ONCE("GazeboRosAlwaysAttached plugin: " << joint_.model2 << " model was not found, ensure the model exists, or remove the plugin.");
         return;
       }
 
@@ -125,7 +125,7 @@ namespace gazebo
       physics::LinkPtr l1 = m1->GetLink(joint_.link1);
       if (l1 == NULL)
       {
-        ROS_ERROR_STREAM(joint_.link1 << " link was not found, please ensure the link exists");
+        ROS_ERROR_STREAM_ONCE("GazeboRosAlwaysAttached plugin: " << joint_.link1 << " link was not found, ensure the link exists, or remove the plugin.");
         return;
       }
       if (l1->GetInertial() == NULL)
@@ -140,7 +140,7 @@ namespace gazebo
       physics::LinkPtr l2 = m2->GetLink(joint_.link2);
       if (l2 == NULL)
       {
-        ROS_ERROR_STREAM(joint_.link2 << " link was not found, please ensure the link exists");
+        ROS_ERROR_STREAM_ONCE("GazeboRosAlwaysAttached plugin: " << joint_.link2 << " link was not found, ensure the link exists, or remove the plugin.");
         return;
       }
       if (l2->GetInertial() == NULL)
